@@ -70,5 +70,24 @@ def parse(file):
                 pn = cn
                 pa = ca
     f.close()
-    #git_add(file)
-parse("baseball.csv")
+    git_add(file)
+
+
+def git_add(file):
+    subprocess.call(["git", "add", file])
+
+
+def git_commit(message):
+    subprocess.call(["git", "commit", "-m", message])
+
+
+def git_push():
+    subprocess.call(["git", "push", "origin", "master"])
+
+
+if __name__ == "__main__":
+    parse("baseball.csv")
+    git_commit("baseball")
+    git_push()
+
+    sys.exit(0)
