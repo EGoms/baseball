@@ -72,7 +72,7 @@ def pitching(file):
 def batting(file):
     url = "https://www.baseball-reference.com/leagues/MLB/2018-standard-batting.shtml"
     f = open(file, "w")
-    headers = ["name", "age", "games", "plate appearance", "at bat", "runs", "hits", "doubles", "triples", "home runes", "RBI",
+    headers = ["name", "age", "games", "plate appearance", "at bat", "runs", "hits", "doubles", "triples", "home runs", "RBI",
                "stolen bases", "walks", "strikeouts", "hits/at bat", "on base pct", "slug pct", "ops\n"]
     row = ",".join(headers)
     f.write(row)
