@@ -69,6 +69,8 @@ def pitching(file):
     f.close()
     fix(file)
     git_add(file)
+
+
 def batting(file):
     url = "https://www.baseball-reference.com/leagues/MLB/2018-standard-batting.shtml"
     f = open(file, "w")
@@ -144,7 +146,7 @@ def git_push():
 
 
 if __name__ == "__main__":
-    batting("baseball.csv")
+    batting("batting.csv")
     pitching("pitching.csv")
     git_commit("baseball")
     git_push()
