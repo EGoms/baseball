@@ -6,12 +6,70 @@ import subprocess
 from tempfile import mkstemp
 from shutil import move
 import re
+import csv
 import sys
 from os import fdopen, remove
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-def parse(file):
+
+def pitching(file):
+    url = "https://www.baseball-reference.com/leagues/MLB/2018-standard-pitching.shtml"
+    f = open(file, "w")
+    headers = ["name", "age", "wins", "losses", "pct", "era", "saves", "ip", "hits", "runs", "er", "hr", "bb", "ibb",
+               "so", "era+", "fip", "whip", "h9", "hr9", "bb9", "so9", "so/w\n"]
+    row = ','.join(headers)
+    f.write(row)
+    r = requests.get(url)
+    soup = BeautifulSoup(re.sub("<!--|-->", "", r.text), "lxml")
+
+    tables = soup.find_all('table')
+    table = tables[1]
+    pa = pn = ""
+    for tr in table.select('tr'):
+        cells = tr.find_all('td')
+        if len(cells) > 0:
+            name = cells[0].text.strip("*")
+            age = cells[1].text.strip()
+            wins = cells[4].text.strip()
+            losses = cells[5].text.strip()
+            pct = cells[6].text.strip()
+            era = cells[7].text.strip()
+            saves = cells[13].text.strip()
+            ip = cells[14].text.strip()
+            hits = cells[15].text.strip()
+            runs = cells[16].text.strip()
+            er = cells[17].text.strip()
+            hr = cells[18].text.strip()
+            bb = cells[19].text.strip()
+            ibb = cells[20].text.strip()
+            so = cells[21].text.strip()
+            erap = cells[26].text.strip()
+            fip = cells[27].text.strip()
+            whip = cells[28].text.strip()
+            h9 = cells[29].text.strip()
+            hr9 = cells[30].text.strip()
+            bb9 = cells[31].text.strip()
+            so9 = cells[32].text.strip()
+            sow = cells[33].text.strip()
+
+            current = ",".join([name, age, wins,losses,pct,era,saves,ip,hits,runs,er,hr,bb,ibb,so,erap,fip,whip,
+                                h9,hr9,bb9,so9,sow + "\n"])
+
+            cn = name
+            ca = age
+
+            if cn == pn and ca == pa:
+                pass
+            else:
+                f.write(current)
+                pn = cn
+                pa = ca
+
+    f.close()
+    fix(file)
+    git_add(file)
+def batting(file):
     url = "https://www.baseball-reference.com/leagues/MLB/2018-standard-batting.shtml"
     f = open(file, "w")
     headers = ["name", "age", "games", "plate appearance", "at bat", "runs", "hits", "doubles", "triples", "home runes", "RBI",
@@ -24,10 +82,7 @@ def parse(file):
     soup.prettify()
     tables = soup.find_all('table')
     table = tables[1]
-
-    pa = ""
-    pn = ""
-
+    pa = pn = ""
     for tr in table.select('tr'):
         cells = tr.find_all('td')
         if len(cells) > 0:
@@ -56,13 +111,6 @@ def parse(file):
             cn = name
             ca = age
 
-            '''
-            when players get traded they appear multiple times on the table. they will be listed sequentially
-            what this does is write the first instance of the player (will be their total stats) and doesn't write any
-            subsequent information on them
-            checks birthdays to separate players with the same name (ie Sebastion Aho * 2)
-            '''
-
             if cn == pn and ca == pa:
                 pass
             else:
@@ -70,7 +118,17 @@ def parse(file):
                 pn = cn
                 pa = ca
     f.close()
+    fix(file)
     git_add(file)
+
+
+def fix(file):
+    read = open(file)
+    lines = read.readlines()
+    read.close()
+    w = open(file, "w")
+    w.writelines([line for line in lines[:-1]])
+    w.close()
 
 
 def git_add(file):
@@ -86,7 +144,8 @@ def git_push():
 
 
 if __name__ == "__main__":
-    parse("baseball.csv")
+    batting("baseball.csv")
+    pitching("pitching.csv")
     git_commit("baseball")
     git_push()
 
