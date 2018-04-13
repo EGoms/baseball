@@ -68,7 +68,6 @@ def pitching(file):
 
     f.close()
     fix(file)
-    git_add(file)
 
 
 def batting(file):
@@ -121,7 +120,6 @@ def batting(file):
                 pa = ca
     f.close()
     fix(file)
-    git_add(file)
 
 
 def fix(file):
@@ -138,7 +136,7 @@ def git_add(file):
 
 
 def git_commit(message):
-    subprocess.call(["git", "commit", "-m", message])
+    subprocess.call(["git", "commit", "-m", "baseball"])
 
 
 def git_push():
@@ -148,6 +146,9 @@ def git_push():
 if __name__ == "__main__":
     batting("batting.csv")
     pitching("pitching.csv")
+
+    git_add("batting.csv")
+    git_add("pitching.csv")
     git_commit("baseball")
     git_push()
 
