@@ -144,9 +144,23 @@ def git_push():
 
 
 if __name__ == "__main__":
-    batting("batting.csv")
-    pitching("pitching.csv")
+    start = datetime.now()
 
+    p1 = Process(target=batting, args=("batting.csv",))
+    p1.start()
+    p2 = Process(target=pitching, args=("pitching.csv",))
+    p2.start()
+
+    p1.join()
+    p2.join()
+
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d \t %H:%M')
+
+    total = datetime.now() - start
+    with open("log.txt", 'a') as f:
+        f.write(today + " - " + str(total) + "\n")
+
+    git_add("log.txt")
     git_add("batting.csv")
     git_add("pitching.csv")
     git_commit("baseball")
