@@ -162,6 +162,7 @@ def git_commit(message):
 
 def git_push():
     subprocess.call(["git", "push", "origin", "master"])
+    subprocess.call(["git", "push", "lab", "master"])
 
 
 if __name__ == "__main__":
