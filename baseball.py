@@ -124,6 +124,72 @@ def team_batting(file):
             f.write(current)
 
 
+def team_pitching(file):
+    url = "https://www.baseball-reference.com/leagues/MLB/2018.shtml"
+    f = open(file, "w")
+    headers = ["Team", "#Pitchers", "Average Age", "RA/G", "W", "L", "W-L%", "ERA", "G", "GS", "GF",
+               "CG", "tSho", "cSho", "SV", "IP", "H", "R", "ER", "HR", "BB", "IBB", "SO", "HBP",
+               "BK", "WP", "BF", "ERA+", "FIP", "WHIP", "H9", "HR9", "BB9", "SO9", "SO/W", "LOB\n"]
+    teams = ["ARI", "ATL", "BAL", "BOS", "CHC", "CHW", "CIN", "CLE", "COL", "DET", "HOU", "KCR", "LAA", "LAD", "MIA",
+             "MIL", "MIN", "NYM", "NYY", "OAK", "PHI",
+             "PIT", "SDP", "SEA", "SFG", "STL", "TBR", "TEX", "TOR", "WSN"]
+    row = ",".join(headers)
+    f.write(row)
+    r = requests.get(url)
+    soup = BeautifulSoup(re.sub("<!--|-->", "", r.text), "lxml")
+
+    soup.prettify()
+    tables = soup.find_all('table')
+    standard_pitching = tables[1]
+    for tr in standard_pitching.select('tr'):
+        cells = tr.find_all('td')
+        if len(cells) > 0:
+            print(cells)
+            num_batters = cells[0].text.strip()
+            bat_age = cells[1].text.strip()
+            rpg = cells[2].text.strip()
+            win = cells[3].text.strip()
+            loss = cells[4].text.strip()
+            wlp = cells[5].text.strip()
+            era = cells[6].text.strip()
+            g = cells[7].text.strip()
+            gs = cells[8].text.strip()
+            gf = cells[9].text.strip()
+            cg = cells[10].text.strip()
+            tsho = cells[11].text.strip()
+            csho = cells[12].text.strip()
+            sv = cells[13].text.strip()
+            ip = cells[14].text.strip()
+            h = cells[15].text.strip()
+            r = cells[16].text.strip()
+            er = cells[17].text.strip()
+            hr = cells[18].text.strip()
+            bb = cells[19].text.strip()
+            ibb = cells[20].text.strip()
+            so = cells[21].text.strip()
+            hbp = cells[22].text.strip()
+            bk = cells[23].text.strip()
+            wp = cells[24].text.strip()
+            bf = cells[25].text.strip()
+            erap = cells[26].text.strip()
+            fip = cells[27].text.strip()
+            whip = cells[28].text.strip()
+            h9 = cells[29].text.strip()
+            hr9 = cells[30].text.strip()
+            bb9 = cells[31].text.strip()
+            so9 = cells[32].text.strip()
+            sow = cells[33].text.strip()
+            lob = cells[34].text.strip()
+
+            current = ",".join[teams[0], num_batters, bat_age, rpg, win, loss, wlp, era, g, gs, gf, cg, tsho, csho, sv, ip, h, r,er,hr,bb,ibb,so,hbp,bk,wp,bf,erap,fip,
+                               whip,h9,hr9,bb9,so9,sow,lob + "\n"]
+            del teams[0]
+            f.write(current)
+
+
+def team_fielding(file):
+    pass
+
 def batting(file):
     url = "https://www.baseball-reference.com/leagues/MLB/2018-standard-batting.shtml"
     f = open(file, "w")
@@ -207,10 +273,13 @@ if __name__ == "__main__":
     p2.start()
     p3 = Process(target=team_batting, args=("team_batting.csv"))
     p3.start()
+    p4 = Process(target=team_pitching, args=("team_pitching.csv"))
+    p4.start()
 
     p1.join()
     p2.join()
     p3.join()
+    p4.join()
 
     today = datetime.strftime(datetime.now(), '%Y-%m-%d \t %H:%M')
 
@@ -222,9 +291,8 @@ if __name__ == "__main__":
     git_add("batting.csv")
     git_add("pitching.csv")
     git_add("team_batting.csv")
+    git_add("team_pitching.csv")
     git_commit("baseball")
     git_push()
-
-    team_batting()
 
     sys.exit(0)
