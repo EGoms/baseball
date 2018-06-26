@@ -7,3 +7,7 @@ All notable changes will be included here
 ## [1.0.0] - 2018-06-08
     -Scrape player batting stats
     -Scrape player pitching stats
+
+## [1.1.0] - 2018-06-26
+    - Scrape team batting stats
+    - Scrape team pitching stats
