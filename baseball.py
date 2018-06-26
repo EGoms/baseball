@@ -2,6 +2,7 @@ import re
 import csv
 import sys
 import requests
+import json
 import subprocess
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -69,27 +70,59 @@ def pitching(file):
     f.close()
     fix(file)
 
-def team_batting():
+
+def team_batting(file):
     url = "https://www.baseball-reference.com/leagues/MLB/2018.shtml"
-    #f = open(file, "w")
+    f = open(file, "w")
     headers = ["Team", "#Players", "Average Age", "R/G", "Games", "PA", "AB", "R", "H", "2B", "3B",
                "HR", "RBI", "SB", "CS", "BB", "SO", "BA", "OBP", "SLG", "OPS", "OPS+", "TB", "GDP",
                "HBP", "SH", "SF", "IBB", "LOB\n"]
+    teams = ["ARI", "ATL", "BAL", "BOS", "CHC", "CHW", "CIN", "CLE", "COL", "DET", "HOU", "KCR", "LAA", "LAD", "MIA","MIL","MIN","NYM","NYY","OAK","PHI",
+             "PIT", "SDP","SEA","SFG","STL","TBR","TEX","TOR","WSN"]
     row = ",".join(headers)
-    #f.write(row)
+    f.write(row)
     r = requests.get(url)
     soup = BeautifulSoup(re.sub("<!--|-->", "", r.text), "lxml")
 
     soup.prettify()
     tables = soup.find_all('table')
-    table = tables[0]
-    for tr in table.select('tr'):
+    standard_batting = tables[0]
+    for tr in standard_batting.select('tr'):
         cells = tr.find_all('td')
-        teams = tr.find_all('th')
-        print(teams)
         if len(cells) > 0:
-            team_name = cells[0].text.strip()
-            #print(cells)
+            num_batters = cells[0].text.strip()
+            bat_age = cells[1].text.strip()
+            rpg = cells[2].text.strip()
+            games = cells[3].text.strip()
+            pa = cells[4].text.strip()
+            ab = cells[5].text.strip()
+            r = cells[6].text.strip()
+            h = cells[7].text.strip()
+            b2 = cells[8].text.strip()
+            b3 = cells[9].text.strip()
+            hr = cells[10].text.strip()
+            rbi = cells[11].text.strip()
+            sb = cells[12].text.strip()
+            cs = cells[13].text.strip()
+            bb = cells[14].text.strip()
+            so = cells[15].text.strip()
+            ba = cells[16].text.strip()
+            obp = cells[17].text.strip()
+            slg = cells[18].text.strip()
+            ops = cells[19].text.strip()
+            opsp = cells[20].text.strip()
+            tb = cells[21].text.strip()
+            gdp = cells[22].text.strip()
+            hbp = cells[23].text.strip()
+            sh = cells[24].text.strip()
+            sf = cells[25].text.strip()
+            ibb = cells[26].text.strip()
+            lob = cells[27].text.strip()
+
+            current = ",".join[teams[0],num_batters,bat_age, rpg, games, pa, ab, r, h,b2,b3,hr,rbi,sb,cs,bb,so,ba,obp,slg,ops,opsp,tb,gdp,hbp,sh,sf,ibb,lob + "\n"]
+            del teams[0]
+            f.write(current)
+
 
 def batting(file):
     url = "https://www.baseball-reference.com/leagues/MLB/2018-standard-batting.shtml"
@@ -172,9 +205,12 @@ if __name__ == "__main__":
     p1.start()
     p2 = Process(target=pitching, args=("pitching.csv",))
     p2.start()
+    p3 = Process(target=team_batting, args=("team_batting.csv"))
+    p3.start()
 
     p1.join()
     p2.join()
+    p3.join()
 
     today = datetime.strftime(datetime.now(), '%Y-%m-%d \t %H:%M')
 
@@ -185,7 +221,10 @@ if __name__ == "__main__":
     git_add("log.txt")
     git_add("batting.csv")
     git_add("pitching.csv")
+    git_add("team_batting.csv")
     git_commit("baseball")
     git_push()
+
+    team_batting()
 
     sys.exit(0)
