@@ -271,16 +271,18 @@ if __name__ == "__main__":
     p1.start()
     p2 = Process(target=pitching, args=("pitching.csv",))
     p2.start()
-    p3 = Process(target=team_batting, args=("team_batting.csv"))
-    p3.start()
-    p4 = Process(target=team_pitching, args=("team_pitching.csv"))
-    p4.start()
+    #p3 = Process(target=team_batting, args=("team_batting.csv"))
+    #p3.start()
+    #p4 = Process(target=team_pitching, args=("team_pitching.csv"))
+    #p4.start()
 
     p1.join()
     p2.join()
-    p3.join()
-    p4.join()
-
+    #p3.join()
+    #p4.join()
+    team_batting("team_batting.csv")
+    team_pitching("team_pitching.csv")
+    
     today = datetime.strftime(datetime.now(), '%Y-%m-%d \t %H:%M')
 
     total = datetime.now() - start
