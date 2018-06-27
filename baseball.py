@@ -145,7 +145,6 @@ def team_pitching(file):
     for tr in standard_pitching.select('tr'):
         cells = tr.find_all('td')
         if len(cells) > 0:
-            print(cells)
             num_batters = cells[0].text.strip()
             bat_age = cells[1].text.strip()
             rpg = cells[2].text.strip()
