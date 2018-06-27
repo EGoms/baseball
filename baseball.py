@@ -119,7 +119,8 @@ def team_batting(file):
             ibb = cells[26].text.strip()
             lob = cells[27].text.strip()
 
-            current = ",".join[teams[0],num_batters,bat_age, rpg, games, pa, ab, r, h,b2,b3,hr,rbi,sb,cs,bb,so,ba,obp,slg,ops,opsp,tb,gdp,hbp,sh,sf,ibb,lob + "\n"]
+            c_team = teams[0]
+            current = ",".join[c_team,num_batters,bat_age, rpg, games, pa, ab, r, h,b2,b3,hr,rbi,sb,cs,bb,so,ba,obp,slg,ops,opsp,tb,gdp,hbp,sh,sf,ibb,lob + "\n"]
             del teams[0]
             f.write(current)
 
@@ -181,7 +182,8 @@ def team_pitching(file):
             sow = cells[33].text.strip()
             lob = cells[34].text.strip()
 
-            current = ",".join[teams[0], num_batters, bat_age, rpg, win, loss, wlp, era, g, gs, gf, cg, tsho, csho, sv, ip, h, r,er,hr,bb,ibb,so,hbp,bk,wp,bf,erap,fip,
+            c_team = teams[0]
+            current = ",".join[c_team, num_batters, bat_age, rpg, win, loss, wlp, era, g, gs, gf, cg, tsho, csho, sv, ip, h, r,er,hr,bb,ibb,so,hbp,bk,wp,bf,erap,fip,
                                whip,h9,hr9,bb9,so9,sow,lob + "\n"]
             del teams[0]
             f.write(current)
