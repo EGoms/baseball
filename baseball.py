@@ -78,7 +78,7 @@ def team_batting(file):
                "HR", "RBI", "SB", "CS", "BB", "SO", "BA", "OBP", "SLG", "OPS", "OPS+", "TB", "GDP",
                "HBP", "SH", "SF", "IBB", "LOB\n"]
     teams = ["ARI", "ATL", "BAL", "BOS", "CHC", "CHW", "CIN", "CLE", "COL", "DET", "HOU", "KCR", "LAA", "LAD", "MIA","MIL","MIN","NYM","NYY","OAK","PHI",
-             "PIT", "SDP","SEA","SFG","STL","TBR","TEX","TOR","WSN"]
+             "PIT", "SDP","SEA","SFG","STL","TBR","TEX","TOR","WSN", "LgAvg"]
     row = ",".join(headers)
     f.write(row)
     r = requests.get(url)
@@ -120,7 +120,7 @@ def team_batting(file):
             lob = cells[27].text.strip()
 
             #c_team = teams[0]
-            current = ",".join([teams.pop(0) if teams else "avg",num_batters,bat_age, rpg, games, pa, ab, r, h,b2,b3,hr,rbi,sb,cs,bb,so,ba,obp,slg,ops,opsp,tb,gdp,hbp,sh,sf,ibb,lob + "\n"])
+            current = ",".join([teams.pop(0) if teams else "total",num_batters,bat_age, rpg, games, pa, ab, r, h,b2,b3,hr,rbi,sb,cs,bb,so,ba,obp,slg,ops,opsp,tb,gdp,hbp,sh,sf,ibb,lob + "\n"])
             #del teams[0]
             f.write(current)
 
@@ -133,7 +133,7 @@ def team_pitching(file):
                "BK", "WP", "BF", "ERA+", "FIP", "WHIP", "H9", "HR9", "BB9", "SO9", "SO/W", "LOB\n"]
     teams = ["ARI", "ATL", "BAL", "BOS", "CHC", "CHW", "CIN", "CLE", "COL", "DET", "HOU", "KCR", "LAA", "LAD", "MIA",
              "MIL", "MIN", "NYM", "NYY", "OAK", "PHI",
-             "PIT", "SDP", "SEA", "SFG", "STL", "TBR", "TEX", "TOR", "WSN"]
+             "PIT", "SDP", "SEA", "SFG", "STL", "TBR", "TEX", "TOR", "WSN", "LgAvg"]
     row = ",".join(headers)
     f.write(row)
     r = requests.get(url)
@@ -182,7 +182,7 @@ def team_pitching(file):
             lob = cells[34].text.strip()
 
             #c_team = teams[0]
-            current = ",".join([teams.pop(0) if teams else "avg", num_batters, bat_age, rpg, win, loss, wlp, era, g, gs, gf, cg, tsho, csho, sv, ip, h, r,er,hr,bb,ibb,so,hbp,bk,wp,bf,erap,fip,
+            current = ",".join([teams.pop(0) if teams else "total", num_batters, bat_age, rpg, win, loss, wlp, era, g, gs, gf, cg, tsho, csho, sv, ip, h, r,er,hr,bb,ibb,so,hbp,bk,wp,bf,erap,fip,
                                whip,h9,hr9,bb9,so9,sow,lob + "\n"])
             #del teams[0]
             f.write(current)
