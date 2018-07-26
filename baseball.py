@@ -264,7 +264,10 @@ def git_push():
     subprocess.call(["git", "push", "origin", "master"])
     subprocess.call(["git", "push", "lab", "master"])
 
+def git_pull():
+    subprocess.call(["git", "pull", "origin", "master"])
 
+    
 if __name__ == "__main__":
     start = datetime.now()
 
@@ -289,7 +292,8 @@ if __name__ == "__main__":
     total = datetime.now() - start
     with open("log.txt", 'a') as f:
         f.write(today + " - " + str(total) + "\n")
-
+    
+    git_pull()
     git_add("log.txt")
     git_add("batting.csv")
     git_add("pitching.csv")
